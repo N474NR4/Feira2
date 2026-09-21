@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chatbot modular de personagem histórico com IA e voz.">
+    <title>Chatbot de Persona</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-shell">
+
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-mark" aria-hidden="true">AI</div>
+                <div>
+                    <strong id="headerName">Alan Turing</strong>
+                    <span id="headerDescription">Personalidade histórica</span>
+                </div>
+            </div>
+
+            <div class="top-actions">
+                <button class="icon-button" id="newChatButton" type="button" aria-label="Nova conversa" title="Nova conversa">＋</button>
+                <button class="icon-button" id="settingsButton" type="button" aria-label="Abrir configurações" title="Configurações">⚙</button>
+            </div>
+        </header>
+
+        <main class="main-layout">
+
+            <aside class="bio-panel panel">
+                <div class="panel-kicker">PERSONALIDADE</div>
+                <div class="bio-avatar">
+                    <img id="bioAvatar" src="images/personagem.jpg" alt="Retrato da personalidade">
+                </div>
+                <h1 id="bioName">Alan Turing</h1>
+                <p id="bioDescription">Matemático, lógico e pioneiro da computação.</p>
+
+                <div class="status-line">
+                    <span class="status-dot" id="statusDot"></span>
+                    <span id="statusText">Online</span>
+                </div>
+
+                <div class="bio-copy" id="bioCopy">
+                    Uma simulação conversacional baseada em informações históricas documentadas.
+                </div>
+
+                <div class="bio-actions">
+                    <button class="secondary-button" id="clearHistoryButton" type="button">Limpar histórico</button>
+                    <button class="secondary-button" id="stopVoiceButton" type="button">Parar voz</button>
+                </div>
+            </aside>
+
+            <section class="chat-stage">
+                <div class="character-panel panel">
+                    <div class="character-header">
+                        <div>
+                            <span class="panel-kicker">CHATBOT DE PERSONA</span>
+                            <h2 id="characterTitle">Alan Turing</h2>
+                        </div>
+                        <div class="state-badge" id="stateBadge">Normal</div>
+                    </div>
+
+                    <div class="character-view">
+                        <div class="avatar-frame" id="avatarFrame">
+                            <img id="characterAvatar" src="images/personagem.jpg" alt="Avatar da personalidade">
+                        </div>
+                    </div>
+
+                    <div class="character-caption">
+                        <strong id="captionTitle">Personalidade ao falar</strong>
+                        <span id="captionText">Responde de acordo com o contexto configurado.</span>
+                    </div>
+                </div>
+
+                <section class="chat-panel panel" aria-label="Conversa">
+                    <div class="chat-toolbar">
+                        <div>
+                            <span class="panel-kicker">CONVERSA</span>
+                            <span class="chat-count" id="messageCount">0 mensagens</span>
+                        </div>
+                        <div class="processing" id="processingIndicator" hidden>
+                            <span class="typing-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                            Pensando...
+                        </div>
+                    </div>
+
+                    <div class="messages" id="messages" aria-live="polite" aria-label="Mensagens da conversa"></div>
+                </section>
+
+                <form class="composer panel" id="composer">
+                    <label class="sr-only" for="messageInput">Digite sua pergunta</label>
+                    <textarea id="messageInput" rows="1" maxlength="4000"
+                        placeholder="Digite sua pergunta..." aria-label="Digite sua pergunta"></textarea>
+                    <div class="composer-footer">
+                        <span class="hint">Enter envia · Shift + Enter quebra linha</span>
+                        <button class="send-button" id="sendButton" type="submit" aria-label="Enviar pergunta" title="Enviar pergunta">
+                            <span aria-hidden="true">➜</span>
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <div class="modal-backdrop" id="settingsBackdrop" hidden>
+        <aside class="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+            <div class="settings-header">
+                <div>
+                    <span class="panel-kicker">CONFIGURAÇÃO</span>
+                    <h2 id="settingsTitle">Controles da persona</h2>
+                </div>
+                <button class="icon-button" id="closeSettingsButton" type="button" aria-label="Fechar configurações">×</button>
+            </div>
+
+            <div class="settings-scroll">
+
+                <section class="settings-section persona-editor">
+                    <div class="section-heading">
+                        <div>
+                            <span class="panel-kicker">PERSONA</span>
+                            <h3>Personalidade</h3>
+                        </div>
+                        <span class="edit-status" id="personaEditStatus">Configuração atual</span>
+                    </div>
+
+                    <label for="personaName">Nome</label>
+                    <input class="text-input" id="personaName" type="text" maxlength="80">
+
+                    <label for="personaDescription">Descrição</label>
+                    <input class="text-input" id="personaDescription" type="text" maxlength="160">
+
+                    <label for="personaPersonality">Personalidade</label>
+                    <textarea class="settings-textarea" id="personaPersonality" rows="4"
+                        placeholder="Ex.: analítico, reservado, curioso, direto..."></textarea>
+
+                    <label for="personaStyle">Jeito de falar</label>
+                    <textarea class="settings-textarea" id="personaStyle" rows="4"
+                        placeholder="Ex.: frases curtas, linguagem formal, usa analogias, evita gírias..."></textarea>
+
+                    <label for="personaKnowledge">Conhecimentos</label>
+                    <textarea class="settings-textarea" id="personaKnowledge" rows="4"
+                        placeholder="Quais assuntos a persona domina?"></textarea>
+
+                    <label for="personaLimitations">Limitações</label>
+                    <textarea class="settings-textarea" id="personaLimitations" rows="4"
+                        placeholder="O que ela não deve inventar ou afirmar?"></textarea>
+
+                    <label for="formalityRange">Formalidade <output id="formalityValue">70%</output></label>
+                    <input id="formalityRange" type="range" min="0" max="100" step="1">
+
+                    <label for="humorRange">Humor <output id="humorValue">10%</output></label>
+                    <input id="humorRange" type="range" min="0" max="100" step="1">
+
+                    <label for="objectivityRange">Objetividade <output id="objectivityValue">80%</output></label>
+                    <input id="objectivityRange" type="range" min="0" max="100" step="1">
+
+                    <label for="depthRange">Profundidade <output id="depthValue">70%</output></label>
+                    <input id="depthRange" type="range" min="0" max="100" step="1">
+
+                    <div class="settings-actions">
+                        <button class="secondary-button" id="resetPersonaButton" type="button">Restaurar padrão</button>
+                        <button class="primary-small-button" id="applyPersonaButton" type="button">Aplicar personalidade</button>
+                    </div>
+                </section>
+
+                <section class="settings-section">
+                    <h3>Voz</h3>
+                    <label class="switch-row">
+                        <span>Falar automaticamente</span>
+                        <input id="autoSpeakToggle" type="checkbox">
+                    </label>
+
+                    <label for="voiceSelect">Voz disponível</label>
+                    <select id="voiceSelect"></select>
+
+                    <label for="rateRange">Velocidade da fala <output id="rateValue">1.00</output></label>
+                    <input id="rateRange" type="range" min="0.5" max="2" step="0.05">
+
+                    <label for="pitchRange">Tom de voz <output id="pitchValue">1.00</output></label>
+                    <input id="pitchRange" type="range" min="0" max="2" step="0.05">
+
+                    <label for="volumeRange">Volume <output id="volumeValue">1.00</output></label>
+                    <input id="volumeRange" type="range" min="0" max="1" step="0.05">
+
+                    <button class="secondary-button full" id="testVoiceButton" type="button">Testar voz</button>
+                </section>
+
+                <section class="settings-section">
+                    <h3>IA</h3>
+                    <p class="small-note">
+                        O modo simulado funciona sem internet. Para uma IA real, use um backend seu e configure o endpoint na seção de configuração do JavaScript.
+                    </p>
+                    <div class="readout-grid">
+                        <span>Provedor</span><strong id="providerReadout">simulado</strong>
+                        <span>Modelo</span><strong id="modelReadout">—</strong>
+                    </div>
+                </section>
+
+                <section class="settings-section">
+                    <h3>Histórico</h3>
+                    <button class="secondary-button full" id="exportHistoryButton" type="button">Exportar conversa</button>
+                    <button class="danger-button full" id="deleteHistoryButton" type="button">Apagar conversa</button>
+                </section>
+            </div>
+        </aside>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
